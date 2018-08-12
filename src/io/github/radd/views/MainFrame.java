@@ -72,6 +72,8 @@ public class MainFrame extends javax.swing.JFrame implements Observer {
         editButton = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
+        chooseImagesMenuItem = new javax.swing.JMenuItem();
+        saveFolderMenuItem = new javax.swing.JMenuItem();
         editMenu = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -194,6 +196,23 @@ public class MainFrame extends javax.swing.JFrame implements Observer {
         );
 
         fileMenu.setText("File");
+
+        chooseImagesMenuItem.setText("Choose images");
+        chooseImagesMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chooseImagesMenuItemActionPerformed(evt);
+            }
+        });
+        fileMenu.add(chooseImagesMenuItem);
+
+        saveFolderMenuItem.setText("Choose save folder");
+        saveFolderMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveFolderMenuItemActionPerformed(evt);
+            }
+        });
+        fileMenu.add(saveFolderMenuItem);
+
         menuBar.add(fileMenu);
 
         editMenu.setText("Edit");
@@ -231,6 +250,10 @@ public class MainFrame extends javax.swing.JFrame implements Observer {
     }// </editor-fold>//GEN-END:initComponents
 
     private void chooseImagesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chooseImagesButtonActionPerformed
+        chooseImages();
+    }//GEN-LAST:event_chooseImagesButtonActionPerformed
+
+    private void chooseImages() {
         String path = model.getFileChooserPath();
         JFileChooser chooser = new JFileChooser(path);
 	chooser.setFileFilter(model.getFilter());
@@ -240,9 +263,13 @@ public class MainFrame extends javax.swing.JFrame implements Observer {
         if (returnVal == JFileChooser.APPROVE_OPTION) { 
             controller.setImages(chooser.getSelectedFiles());
         }
-    }//GEN-LAST:event_chooseImagesButtonActionPerformed
-
+    }
+    
     private void chooseFolderButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chooseFolderButtonActionPerformed
+        chooseSaveFolder();
+    }//GEN-LAST:event_chooseFolderButtonActionPerformed
+
+    private void chooseSaveFolder() {
         String path = model.getFileChooserPath();
         JFileChooser chooser = new JFileChooser(path);
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -251,7 +278,14 @@ public class MainFrame extends javax.swing.JFrame implements Observer {
         if (returnVal == JFileChooser.APPROVE_OPTION) { 
             controller.setSaveFolder(chooser.getSelectedFile());
         }
-    }//GEN-LAST:event_chooseFolderButtonActionPerformed
+    }
+    private void chooseImagesMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chooseImagesMenuItemActionPerformed
+        chooseImages();
+    }//GEN-LAST:event_chooseImagesMenuItemActionPerformed
+
+    private void saveFolderMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveFolderMenuItemActionPerformed
+        chooseSaveFolder();
+    }//GEN-LAST:event_saveFolderMenuItemActionPerformed
 
     /**
      * @param args the command line arguments
@@ -291,6 +325,7 @@ public class MainFrame extends javax.swing.JFrame implements Observer {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton chooseFolderButton;
     private javax.swing.JButton chooseImagesButton;
+    private javax.swing.JMenuItem chooseImagesMenuItem;
     private javax.swing.JPanel controlPanel;
     private javax.swing.JButton editButton;
     private javax.swing.JMenu editMenu;
@@ -303,6 +338,7 @@ public class MainFrame extends javax.swing.JFrame implements Observer {
     private javax.swing.JLabel qualityPercentLabel;
     private javax.swing.JSpinner qualitySpinner;
     private javax.swing.JLabel saveFolderLabel;
+    private javax.swing.JMenuItem saveFolderMenuItem;
     private javax.swing.JTextField saveFolderTextField;
     private javax.swing.JLabel shrinkLabel;
     private javax.swing.JLabel shrinkPercentLabel;
