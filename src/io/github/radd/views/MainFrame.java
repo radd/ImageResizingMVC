@@ -282,7 +282,8 @@ public class MainFrame extends javax.swing.JFrame implements Observer {
     }//GEN-LAST:event_chooseImagesButtonActionPerformed
 
     private void chooseImages() {
-        String path = model.getFileChooserPath();
+        String path = model.getSourceFolderPath() != null
+                ? model.getSourceFolderPath() : model.getFileChooserPath();
         JFileChooser chooser = new JFileChooser(path);
 	chooser.setFileFilter(model.getFilter());
         chooser.setMultiSelectionEnabled(true);
@@ -298,7 +299,8 @@ public class MainFrame extends javax.swing.JFrame implements Observer {
     }//GEN-LAST:event_chooseFolderButtonActionPerformed
 
     private void chooseSaveFolder() {
-        String path = model.getFileChooserPath();
+        String path = model.getDestinationFolderPath() != null
+                ? model.getDestinationFolderPath() : model.getFileChooserPath();
         JFileChooser chooser = new JFileChooser(path);
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         chooser.setAcceptAllFileFilterUsed(false);
