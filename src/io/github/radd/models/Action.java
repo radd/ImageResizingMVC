@@ -10,5 +10,7 @@ package io.github.radd.models;
  * @author Piotr
  */
 public enum Action {
-    SET_IMAGES
+    SET_IMAGES,
+    SET_SOURCE_PATH, 
+    SET_DEST_PATH
 }

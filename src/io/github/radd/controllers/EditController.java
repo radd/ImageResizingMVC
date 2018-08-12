@@ -14,4 +14,6 @@ import java.io.File;
 public interface EditController {
     
     public void setImages(File[] files);
+
+    public void setSaveFolder(File folder);
 }

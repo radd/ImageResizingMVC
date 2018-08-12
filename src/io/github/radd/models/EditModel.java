@@ -16,9 +16,15 @@ public interface EditModel {
     
     public File[] getImages();
     
-    public void setImages(File[] files);
+    public void loadImages(File[] files);
 
     public String getFileChooserPath();
 
     public FileNameExtensionFilter getFilter();
+
+    public String getSourceFolderPath();
+
+    public String getDestinationFolderPath();
+
+    public void setDestinationFolderPath(File dir);
 }

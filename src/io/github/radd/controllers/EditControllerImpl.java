@@ -26,8 +26,11 @@ public class EditControllerImpl implements EditController {
     
     @Override
     public void setImages(File[] files) {
-        model.setImages(files);
+        model.loadImages(files);
     }
-    
-    
+
+    @Override
+    public void setSaveFolder(File folder) {
+        model.setDestinationFolderPath(folder);
+    } 
 }

@@ -13,7 +13,7 @@ import java.util.Observable;
 import java.util.Observer;
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.filechooser.FileFilter;
 
 /**
  *
@@ -88,6 +88,11 @@ public class MainFrame extends javax.swing.JFrame implements Observer {
         saveFolderLabel.setText("Save folder:");
 
         chooseFolderButton.setText("Choose folder");
+        chooseFolderButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chooseFolderButtonActionPerformed(evt);
+            }
+        });
 
         sourceLabel.setText("Source:");
 
@@ -230,11 +235,23 @@ public class MainFrame extends javax.swing.JFrame implements Observer {
         JFileChooser chooser = new JFileChooser(path);
 	chooser.setFileFilter(model.getFilter());
         chooser.setMultiSelectionEnabled(true);
+        chooser.setAcceptAllFileFilterUsed(false);
         int returnVal = chooser.showOpenDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) { 
             controller.setImages(chooser.getSelectedFiles());
         }
     }//GEN-LAST:event_chooseImagesButtonActionPerformed
+
+    private void chooseFolderButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chooseFolderButtonActionPerformed
+        String path = model.getFileChooserPath();
+        JFileChooser chooser = new JFileChooser(path);
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        chooser.setAcceptAllFileFilterUsed(false);
+        int returnVal = chooser.showOpenDialog(this);
+        if (returnVal == JFileChooser.APPROVE_OPTION) { 
+            controller.setSaveFolder(chooser.getSelectedFile());
+        }
+    }//GEN-LAST:event_chooseFolderButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -296,12 +313,13 @@ public class MainFrame extends javax.swing.JFrame implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        System.out.println("update");
-        
         Action action = (Action) arg;
+        System.out.println("update: " + action);
         
         switch(action) {
             case SET_IMAGES: setImageList(); break;
+            case SET_SOURCE_PATH: setSourcePath(); break;
+            case SET_DEST_PATH: setDestPath(); break;
         }
     }
     
@@ -310,5 +328,13 @@ public class MainFrame extends javax.swing.JFrame implements Observer {
         listModel.removeAllElements();
         for(File file : model.getImages())
             listModel.addElement(file.getAbsolutePath());
+    }
+
+    private void setSourcePath() {
+        sourceTextField.setText(model.getSourceFolderPath());
+    }
+
+    private void setDestPath() {
+        saveFolderTextField.setText(model.getDestinationFolderPath());
     }
 }

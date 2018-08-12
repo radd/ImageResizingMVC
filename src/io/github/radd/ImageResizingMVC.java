@@ -7,7 +7,6 @@ package io.github.radd;
 
 import io.github.radd.controllers.EditControllerImpl;
 import io.github.radd.models.EditModelImpl;
-import io.github.radd.views.MainFrame;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.UnsupportedLookAndFeelException;
