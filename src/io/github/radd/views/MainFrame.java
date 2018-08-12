@@ -5,17 +5,43 @@
  */
 package io.github.radd.views;
 
+import io.github.radd.controllers.EditController;
+import io.github.radd.models.Action;
+import io.github.radd.models.EditModel;
+import java.io.File;
+import java.util.Observable;
+import java.util.Observer;
+import javax.swing.DefaultListModel;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 /**
  *
  * @author Piotr
  */
-public class MainFrame extends javax.swing.JFrame {
+public class MainFrame extends javax.swing.JFrame implements Observer {
 
+    private EditController controller;
+    private EditModel model;
+    private DefaultListModel listModel;
+    
     /**
      * Creates new form MainFrame
      */
     public MainFrame() {
         initComponents();
+    }
+    
+    public MainFrame(EditController c, EditModel m) {
+        controller = c;
+        model = m;
+        ((Observable) model).addObserver(this);
+        initComponents();
+        showView();
+    }
+    
+    private void showView() {
+        setVisible(true);
     }
 
     /**
@@ -28,22 +54,22 @@ public class MainFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         controlPanel = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
-        photosScrollPane = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        chooseImagesButton = new javax.swing.JButton();
+        saveFolderLabel = new javax.swing.JLabel();
+        saveFolderTextField = new javax.swing.JTextField();
+        chooseFolderButton = new javax.swing.JButton();
+        sourceLabel = new javax.swing.JLabel();
+        sourceTextField = new javax.swing.JTextField();
+        imagesScrollPane = new javax.swing.JScrollPane();
+        imageList = new javax.swing.JList<>();
         editPanel = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jSpinner1 = new javax.swing.JSpinner();
-        jLabel5 = new javax.swing.JLabel();
-        jSpinner2 = new javax.swing.JSpinner();
-        jLabel6 = new javax.swing.JLabel();
-        jButton3 = new javax.swing.JButton();
+        shrinkLabel = new javax.swing.JLabel();
+        shrinkPercentLabel = new javax.swing.JLabel();
+        shrinkSpinner = new javax.swing.JSpinner();
+        qualityPercentLabel = new javax.swing.JLabel();
+        qualitySpinner = new javax.swing.JSpinner();
+        qualityLabel = new javax.swing.JLabel();
+        editButton = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         editMenu = new javax.swing.JMenu();
@@ -52,17 +78,18 @@ public class MainFrame extends javax.swing.JFrame {
 
         controlPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Source and destination"));
 
-        jButton1.setText("Choose photos");
+        chooseImagesButton.setText("Choose images");
+        chooseImagesButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chooseImagesButtonActionPerformed(evt);
+            }
+        });
 
-        jLabel1.setText("Save folder:");
+        saveFolderLabel.setText("Save folder:");
 
-        jTextField1.setText("jTextField1");
+        chooseFolderButton.setText("Choose folder");
 
-        jButton2.setText("Choose folder");
-
-        jLabel2.setText("Source:");
-
-        jTextField2.setText("jTextField2");
+        sourceLabel.setText("Source:");
 
         javax.swing.GroupLayout controlPanelLayout = new javax.swing.GroupLayout(controlPanel);
         controlPanel.setLayout(controlPanelLayout);
@@ -71,16 +98,16 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(controlPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(controlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2))
+                    .addComponent(saveFolderLabel)
+                    .addComponent(sourceLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(controlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
-                    .addComponent(jTextField1))
+                    .addComponent(sourceTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
+                    .addComponent(saveFolderTextField))
                 .addGap(18, 18, 18)
-                .addGroup(controlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton2)
-                    .addComponent(jButton1))
+                .addGroup(controlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(chooseImagesButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(chooseFolderButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(27, 27, 27))
         );
         controlPanelLayout.setVerticalGroup(
@@ -88,37 +115,35 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(controlPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(controlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jLabel2)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(chooseImagesButton)
+                    .addComponent(sourceLabel)
+                    .addComponent(sourceTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(controlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2))
+                    .addComponent(saveFolderLabel)
+                    .addComponent(saveFolderTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(chooseFolderButton))
                 .addContainerGap(20, Short.MAX_VALUE))
         );
 
-        photosScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder("Photos"));
+        imagesScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder("Images"));
 
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        photosScrollPane.setViewportView(jList1);
+        listModel = new DefaultListModel();
+        imageList.setModel(listModel);
+        imageList.setEnabled(false);
+        imagesScrollPane.setViewportView(imageList);
 
         editPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Edit"));
 
-        jLabel3.setText("Shrink size:");
+        shrinkLabel.setText("Shrink size:");
 
-        jLabel4.setText("%");
+        shrinkPercentLabel.setText("%");
 
-        jLabel5.setText("%");
+        qualityPercentLabel.setText("%");
 
-        jLabel6.setText("Quality:");
+        qualityLabel.setText("Quality:");
 
-        jButton3.setText("Edit");
+        editButton.setText("Edit");
 
         javax.swing.GroupLayout editPanelLayout = new javax.swing.GroupLayout(editPanel);
         editPanel.setLayout(editPanelLayout);
@@ -128,21 +153,21 @@ public class MainFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(editPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(editPanelLayout.createSequentialGroup()
-                        .addComponent(jLabel3)
+                        .addComponent(shrinkLabel)
                         .addGap(7, 7, 7)
-                        .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(shrinkSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel4))
+                        .addComponent(shrinkPercentLabel))
                     .addGroup(editPanelLayout.createSequentialGroup()
-                        .addComponent(jLabel6)
+                        .addComponent(qualityLabel)
                         .addGap(7, 7, 7)
-                        .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(qualitySpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel5)))
+                        .addComponent(qualityPercentLabel)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, editPanelLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(editButton, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         editPanelLayout.setVerticalGroup(
@@ -150,16 +175,16 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(editPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(editPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4)
-                    .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(shrinkLabel)
+                    .addComponent(shrinkPercentLabel)
+                    .addComponent(shrinkSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(editPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel5)
-                    .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(qualityLabel)
+                    .addComponent(qualityPercentLabel)
+                    .addComponent(qualitySpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton3)
+                .addComponent(editButton)
                 .addContainerGap())
         );
 
@@ -180,7 +205,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(controlPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(photosScrollPane)
+                        .addComponent(imagesScrollPane)
                         .addGap(18, 18, 18)
                         .addComponent(editPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
@@ -192,13 +217,24 @@ public class MainFrame extends javax.swing.JFrame {
                 .addComponent(controlPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(photosScrollPane)
+                    .addComponent(imagesScrollPane)
                     .addComponent(editPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void chooseImagesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chooseImagesButtonActionPerformed
+        String path = model.getFileChooserPath();
+        JFileChooser chooser = new JFileChooser(path);
+	chooser.setFileFilter(model.getFilter());
+        chooser.setMultiSelectionEnabled(true);
+        int returnVal = chooser.showOpenDialog(this);
+        if (returnVal == JFileChooser.APPROVE_OPTION) { 
+            controller.setImages(chooser.getSelectedFiles());
+        }
+    }//GEN-LAST:event_chooseImagesButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -236,25 +272,43 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton chooseFolderButton;
+    private javax.swing.JButton chooseImagesButton;
     private javax.swing.JPanel controlPanel;
+    private javax.swing.JButton editButton;
     private javax.swing.JMenu editMenu;
     private javax.swing.JPanel editPanel;
     private javax.swing.JMenu fileMenu;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JList<String> jList1;
-    private javax.swing.JSpinner jSpinner1;
-    private javax.swing.JSpinner jSpinner2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JList<String> imageList;
+    private javax.swing.JScrollPane imagesScrollPane;
     private javax.swing.JMenuBar menuBar;
-    private javax.swing.JScrollPane photosScrollPane;
+    private javax.swing.JLabel qualityLabel;
+    private javax.swing.JLabel qualityPercentLabel;
+    private javax.swing.JSpinner qualitySpinner;
+    private javax.swing.JLabel saveFolderLabel;
+    private javax.swing.JTextField saveFolderTextField;
+    private javax.swing.JLabel shrinkLabel;
+    private javax.swing.JLabel shrinkPercentLabel;
+    private javax.swing.JSpinner shrinkSpinner;
+    private javax.swing.JLabel sourceLabel;
+    private javax.swing.JTextField sourceTextField;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void update(Observable o, Object arg) {
+        System.out.println("update");
+        
+        Action action = (Action) arg;
+        
+        switch(action) {
+            case SET_IMAGES: setImageList(); break;
+        }
+    }
+    
+    
+    private void setImageList() {
+        listModel.removeAllElements();
+        for(File file : model.getImages())
+            listModel.addElement(file.getAbsolutePath());
+    }
 }
