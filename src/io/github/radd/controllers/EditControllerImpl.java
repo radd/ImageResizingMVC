@@ -33,4 +33,14 @@ public class EditControllerImpl implements EditController {
     public void setSaveFolder(File folder) {
         model.setDestinationFolderPath(folder);
     } 
+
+    @Override
+    public void setShrink(int i) {
+        model.setShrink(i);
+    }
+
+    @Override
+    public void setQuality(int i) {
+        model.setQuality(i);
+    }
 }

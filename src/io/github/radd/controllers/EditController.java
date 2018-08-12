@@ -16,4 +16,8 @@ public interface EditController {
     public void setImages(File[] files);
 
     public void setSaveFolder(File folder);
+
+    public void setShrink(int i);
+
+    public void setQuality(int i);
 }

@@ -14,6 +14,16 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 public interface EditModel {
     
+    public final int SHRINK_DEFAULT = 100;
+    public final int SHRINK_MAX = 100;
+    public final int SHRINK_MIN = 1;
+    public final int SHRINK_STEP = 2;
+    
+    public final int QUALITY_DEFAULT = 100;
+    public final int QUALITY_MAX = 100;
+    public final int QUALITY_MIN = 1;
+    public final int QUALITY_STEP = 1;
+     
     public File[] getImages();
     
     public void loadImages(File[] files);
@@ -25,6 +35,9 @@ public interface EditModel {
     public String getSourceFolderPath();
 
     public String getDestinationFolderPath();
-
     public void setDestinationFolderPath(File dir);
+
+    public void setShrink(int i);
+    public void setQuality(int i);
+    
 }

@@ -20,6 +20,9 @@ public class EditModelImpl extends Observable implements EditModel {
     private File[] images;
     private String sourceFolderPath;
     private String destinationFolderPath;
+
+    private int shrink;
+    private int quality;
     
     public EditModelImpl() {
         initModel();
@@ -28,6 +31,7 @@ public class EditModelImpl extends Observable implements EditModel {
     private void initModel() {
         setFileChooserPath();
         setFilter();
+        setEditOptions();
     }
     
     private void changeStateAndNotify(Action a) {
@@ -110,5 +114,24 @@ public class EditModelImpl extends Observable implements EditModel {
         if (dir != null && !dir.getAbsolutePath().isEmpty())
             setDestinationFolderPath(dir.getAbsolutePath());
     }
+
+    private void setEditOptions() {
+        shrink = SHRINK_DEFAULT;
+        quality = QUALITY_DEFAULT;
+    }
+
+    @Override
+    public void setShrink(int i) {
+        if(i >= SHRINK_MIN && i <= SHRINK_MAX)
+            shrink = i;
+    }
+    
+    @Override
+    public void setQuality(int i) {
+        if(i >= QUALITY_MIN && i <= QUALITY_MAX)
+            quality = i;
+    }
+    
+    
  
 }

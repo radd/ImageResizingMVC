@@ -13,6 +13,8 @@ import java.util.Observable;
 import java.util.Observer;
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.filechooser.FileFilter;
 
 /**
@@ -37,11 +39,31 @@ public class MainFrame extends javax.swing.JFrame implements Observer {
         model = m;
         ((Observable) model).addObserver(this);
         initComponents();
+        customInit();
         showView();
     }
     
     private void showView() {
         setVisible(true);
+    }
+    
+    private void customInit() {
+        //TODO add list model and spinner model to EditModel
+        //and set models to components from EditModel
+        
+        SpinnerModel shrinkSpinnerModel = new SpinnerNumberModel(model.SHRINK_DEFAULT,
+                model.SHRINK_MIN, model.SHRINK_MAX, model.SHRINK_STEP);
+        shrinkSpinner.setModel(shrinkSpinnerModel);
+        shrinkSpinnerModel.addChangeListener((e) -> {
+            controller.setShrink((int) shrinkSpinnerModel.getValue());
+        });
+        
+        SpinnerModel qualitySpinnerModel = new SpinnerNumberModel(model.QUALITY_DEFAULT,
+                model.QUALITY_MIN, model.QUALITY_MAX, model.QUALITY_STEP);
+        qualitySpinner.setModel(qualitySpinnerModel);
+        qualitySpinnerModel.addChangeListener((e) -> {
+            controller.setQuality((int) qualitySpinnerModel.getValue());
+        });
     }
 
     /**
@@ -89,6 +111,9 @@ public class MainFrame extends javax.swing.JFrame implements Observer {
 
         saveFolderLabel.setText("Save folder:");
 
+        saveFolderTextField.setEditable(false);
+        saveFolderTextField.setBackground(new java.awt.Color(255, 255, 255));
+
         chooseFolderButton.setText("Choose folder");
         chooseFolderButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -97,6 +122,9 @@ public class MainFrame extends javax.swing.JFrame implements Observer {
         });
 
         sourceLabel.setText("Source:");
+
+        sourceTextField.setEditable(false);
+        sourceTextField.setBackground(new java.awt.Color(255, 255, 255));
 
         javax.swing.GroupLayout controlPanelLayout = new javax.swing.GroupLayout(controlPanel);
         controlPanel.setLayout(controlPanelLayout);
