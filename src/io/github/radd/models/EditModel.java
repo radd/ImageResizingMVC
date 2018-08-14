@@ -14,7 +14,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 public interface EditModel {
     
-    public final int SHRINK_DEFAULT = 100;
+    public final int SHRINK_DEFAULT = 50;
     public final int SHRINK_MAX = 100;
     public final int SHRINK_MIN = 1;
     public final int SHRINK_STEP = 2;
@@ -39,5 +39,9 @@ public interface EditModel {
 
     public void setShrink(int i);
     public void setQuality(int i);
+
+    public void editImages();
+
+    public String getErrorMsg();
     
 }

@@ -12,5 +12,6 @@ package io.github.radd.models;
 public enum Action {
     SET_IMAGES,
     SET_SOURCE_PATH, 
-    SET_DEST_PATH
+    SET_DEST_PATH, 
+    EDIT_OK, EDIT_ERROR_1, EDIT_ERROR_2
 }

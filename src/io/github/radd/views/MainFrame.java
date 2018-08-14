@@ -13,6 +13,7 @@ import java.util.Observable;
 import java.util.Observer;
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.filechooser.FileFilter;
@@ -44,6 +45,7 @@ public class MainFrame extends javax.swing.JFrame implements Observer {
     }
     
     private void showView() {
+        setTitle("Images Resizing");
         setVisible(true);
     }
     
@@ -97,6 +99,7 @@ public class MainFrame extends javax.swing.JFrame implements Observer {
         chooseImagesMenuItem = new javax.swing.JMenuItem();
         saveFolderMenuItem = new javax.swing.JMenuItem();
         editMenu = new javax.swing.JMenu();
+        editMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -176,9 +179,16 @@ public class MainFrame extends javax.swing.JFrame implements Observer {
 
         qualityPercentLabel.setText("%");
 
+        qualitySpinner.setEnabled(false);
+
         qualityLabel.setText("Quality:");
 
         editButton.setText("Edit");
+        editButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout editPanelLayout = new javax.swing.GroupLayout(editPanel);
         editPanel.setLayout(editPanelLayout);
@@ -244,6 +254,15 @@ public class MainFrame extends javax.swing.JFrame implements Observer {
         menuBar.add(fileMenu);
 
         editMenu.setText("Edit");
+
+        editMenuItem.setText("Edit images");
+        editMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editMenuItemActionPerformed(evt);
+            }
+        });
+        editMenu.add(editMenuItem);
+
         menuBar.add(editMenu);
 
         setJMenuBar(menuBar);
@@ -317,6 +336,19 @@ public class MainFrame extends javax.swing.JFrame implements Observer {
         chooseSaveFolder();
     }//GEN-LAST:event_saveFolderMenuItemActionPerformed
 
+    private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editButtonActionPerformed
+        editImages();
+    }//GEN-LAST:event_editButtonActionPerformed
+    
+    private void editImages() {
+        controller.editImages();
+    }
+    
+    private void editMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editMenuItemActionPerformed
+        editImages();
+    }//GEN-LAST:event_editMenuItemActionPerformed
+
+   
     /**
      * @param args the command line arguments
      */
@@ -359,6 +391,7 @@ public class MainFrame extends javax.swing.JFrame implements Observer {
     private javax.swing.JPanel controlPanel;
     private javax.swing.JButton editButton;
     private javax.swing.JMenu editMenu;
+    private javax.swing.JMenuItem editMenuItem;
     private javax.swing.JPanel editPanel;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JList<String> imageList;
@@ -386,6 +419,9 @@ public class MainFrame extends javax.swing.JFrame implements Observer {
             case SET_IMAGES: setImageList(); break;
             case SET_SOURCE_PATH: setSourcePath(); break;
             case SET_DEST_PATH: setDestPath(); break;
+            case EDIT_OK: showInfoMessage("OK"); break;
+            case EDIT_ERROR_1: showErrorMessage("No images selected"); break;
+            case EDIT_ERROR_2: showErrorMessage(model.getErrorMsg()); break;
         }
     }
     
@@ -402,5 +438,26 @@ public class MainFrame extends javax.swing.JFrame implements Observer {
 
     private void setDestPath() {
         saveFolderTextField.setText(model.getDestinationFolderPath());
+    }
+
+    private void showInfoMessage(String msg) {
+        JOptionPane.showMessageDialog(this, msg);
+        enableEdit();
+    }
+
+    public void disableEdit() {
+        editButton.setEnabled(false);
+    }
+    
+    private void enableEdit() {
+        editButton.setEnabled(true);
+    }
+
+    private void showErrorMessage(String msg) {
+        JOptionPane.showMessageDialog(this,
+                msg,
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+        enableEdit(); 
     }
 }

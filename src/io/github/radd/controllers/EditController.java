@@ -20,4 +20,6 @@ public interface EditController {
     public void setShrink(int i);
 
     public void setQuality(int i);
+
+    public void editImages();
 }

@@ -43,4 +43,10 @@ public class EditControllerImpl implements EditController {
     public void setQuality(int i) {
         model.setQuality(i);
     }
+
+    @Override
+    public void editImages() {
+        view.disableEdit();
+        model.editImages();
+    }
 }
